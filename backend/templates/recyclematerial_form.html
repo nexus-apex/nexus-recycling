@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} RecycleMaterial | NexusRecycling{% endblock %}
+{% block page_title %}{% if editing %}Edit RecycleMaterial{% else %}New RecycleMaterial{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Material Type</label>
+        <select name="material_type">
+          <option value="paper" {% if record.material_type == 'paper' %}selected{% endif %}>Paper</option>
+          <option value="plastic" {% if record.material_type == 'plastic' %}selected{% endif %}>Plastic</option>
+          <option value="glass" {% if record.material_type == 'glass' %}selected{% endif %}>Glass</option>
+          <option value="metal" {% if record.material_type == 'metal' %}selected{% endif %}>Metal</option>
+          <option value="e_waste" {% if record.material_type == 'e_waste' %}selected{% endif %}>E Waste</option>
+          <option value="organic" {% if record.material_type == 'organic' %}selected{% endif %}>Organic</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Rate Per Kg</label>
+        <input type="number" step="0.01" name="rate_per_kg" value="{{ record.rate_per_kg|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Total Collected Kg</label>
+        <input type="number" step="0.01" name="total_collected_kg" value="{{ record.total_collected_kg|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Recycled Kg</label>
+        <input type="number" step="0.01" name="recycled_kg" value="{{ record.recycled_kg|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="accepting" {% if record.status == 'accepting' %}selected{% endif %}>Accepting</option>
+          <option value="full" {% if record.status == 'full' %}selected{% endif %}>Full</option>
+          <option value="not_accepting" {% if record.status == 'not_accepting' %}selected{% endif %}>Not Accepting</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} RecycleMaterial</button>
+      <a href="/recyclematerials/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
