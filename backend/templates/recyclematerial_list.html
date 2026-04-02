@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Recyclematerials | NexusRecycling{% endblock %}
+{% block page_title %}Recyclematerials{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search recyclematerials...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Material Type</option>
+      <option value="paper" {% if status_filter == 'paper' %}selected{% endif %}>Paper</option>
+      <option value="plastic" {% if status_filter == 'plastic' %}selected{% endif %}>Plastic</option>
+      <option value="glass" {% if status_filter == 'glass' %}selected{% endif %}>Glass</option>
+      <option value="metal" {% if status_filter == 'metal' %}selected{% endif %}>Metal</option>
+      <option value="e_waste" {% if status_filter == 'e_waste' %}selected{% endif %}>E Waste</option>
+      <option value="organic" {% if status_filter == 'organic' %}selected{% endif %}>Organic</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/recyclematerials/create/" class="btn btn-primary">+ New RecycleMaterial</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Material Type</th><th>Rate Per Kg</th><th>Total Collected Kg</th><th>Recycled Kg</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/recyclematerials/{{ r.pk }}/edit/"><strong>{{ r.name }}</strong></a></td>
+        <td><span class="badge badge-blue">{{ r.get_material_type_display }}</span></td>
+        <td>{{ r.rate_per_kg|floatformat:2 }}</td>
+        <td>{{ r.total_collected_kg|floatformat:2 }}</td>
+        <td>{{ r.recycled_kg|floatformat:2 }}</td>
+        <td class="actions">
+          <a href="/recyclematerials/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/recyclematerials/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No recyclematerials found.</p>
+    <a href="/recyclematerials/create/" class="btn btn-primary" style="margin-top:1rem">Create RecycleMaterial</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
