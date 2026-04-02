@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} CollectionRoute | NexusRecycling{% endblock %}
+{% block page_title %}{% if editing %}Edit CollectionRoute{% else %}New CollectionRoute{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Area</label>
+        <input type="text" name="area" value="{{ record.area|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Stops</label>
+        <input type="number" name="stops" value="{{ record.stops|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Distance Km</label>
+        <input type="number" step="0.01" name="distance_km" value="{{ record.distance_km|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Driver</label>
+        <input type="text" name="driver" value="{{ record.driver|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Vehicle</label>
+        <input type="text" name="vehicle" value="{{ record.vehicle|default:'' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Frequency</label>
+        <select name="frequency">
+          <option value="daily" {% if record.frequency == 'daily' %}selected{% endif %}>Daily</option>
+          <option value="weekly" {% if record.frequency == 'weekly' %}selected{% endif %}>Weekly</option>
+          <option value="biweekly" {% if record.frequency == 'biweekly' %}selected{% endif %}>Biweekly</option>
+          <option value="monthly" {% if record.frequency == 'monthly' %}selected{% endif %}>Monthly</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="active" {% if record.status == 'active' %}selected{% endif %}>Active</option>
+          <option value="suspended" {% if record.status == 'suspended' %}selected{% endif %}>Suspended</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} CollectionRoute</button>
+      <a href="/collectionroutes/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
